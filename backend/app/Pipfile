@@ -1,0 +1,22 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+flask-cors = "*"
+flask-bcrypt = "*"
+flask-jwt-extended = "*"
+flask = "*"
+flask-sqlalchemy = "*"
+pymysql = "*"
+cryptography = "*"
+sqlalchemy = "*"
+requests = {extras = ["security"], version = "*"}
+gunicorn = "*"
+
+[dev-packages]
+ipython = "*"
+
+[requires]
+python_version = "3.9"

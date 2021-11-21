@@ -1,0 +1,43 @@
+version: '3'
+services:
+  db:
+    image: mariadb:10
+    volumes:
+      - ./db/data:/var/lib/mysql
+    environment:
+      MARIADB_RANDOM_ROOT_PASSWORD: "true"
+      MARIADB_DATABASE: ccdashboard
+      MARIADB_USER: ccuser 
+      MARIADB_PASSWORD: ccpass 
+      TZ: Asia/Taipei
+    command:
+      - "--character-set-server=utf8mb4"
+      - "--collation-server=utf8mb4_unicode_ci"
+    networks:
+      - ccdashboard
+
+  backend:
+    build: ./backend/
+    ports:
+      - "127.0.0.1:10000:8000"
+    environment:
+      DBURL: "mysql+pymysql://ccuser:ccpass@db/ccdashboard?charset=utf8mb4"
+      SECRETKEY: YOUREALLYNEEDTOCHANGETHIS #CHANGE THIS
+      TZ: Asia/Taipei
+    
+    restart: on-failure
+    
+    networks:
+      - ccdashboard
+  
+  fetcher:
+    build: ./fetcher/
+    environment:
+      DBURL: "mysql+pymysql://ccuser:ccpass@db/ccdashboard?charset=utf8mb4"
+      TZ: Asia/Taipei
+    networks:
+      - ccdashboard
+    restart: on-failure
+
+networks:
+  ccdashboard:
